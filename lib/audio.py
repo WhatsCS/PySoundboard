@@ -29,13 +29,14 @@ from pprint import pprint
 
 
 class Audio:
-    def __init__(self, args, queue, event):
+    def __init__(self, args, queue, event, fobj):
         self.args = args
         self.queue = queue
         self.event = event
+        self.fobj = fobj
 
     def _callback(self, outdata, frames, time, status):
-        assert frames == self.args.blocksize
+        assert frames == self.args['blocksize']
         if status.output_underflow:
             print('Output underflow: increase blocksize?', file=sys.stderr)
             raise sd.CallbackAbort
