@@ -70,6 +70,8 @@ with open('config.yaml') as conf:
 config = dict(MainConfig['SoundConfig']['Sound-1'])
 config.update(vars(args))
 
+#TODO: Figure out how to get information of the currently running stream
+#      I'll probably have to figure out threading more properly cause my head hurts
 try:
     Audio(args=config, queue=q, event=event).play_file()
 except KeyboardInterrupt:
