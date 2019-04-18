@@ -3,11 +3,14 @@
     users to bind a key/GUI Button to any type of sound/video file.
 '''
 import argparse
+import os
 import queue
 import sounddevice as sd
 import threading
+import yaml
 from lib.audio import Audio
 from lib.utils import get_devs
+from pprint import pprint
 
 
 def int_or_str(text):
@@ -19,7 +22,11 @@ def int_or_str(text):
 
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('filename', help='audio file to be played back')
+parser.add_argument(
+    '-c',
+    '--config',
+    help='load config from non-standard location',
+    default='None')
 parser.add_argument(
     '-d',
     '--device',
@@ -55,8 +62,16 @@ if args.list_devices is True:
 q = queue.Queue(maxsize=args.buffersize)
 event = threading.Event()
 
+# Load config into args (for now)
+with open('config.yaml') as conf:
+    MainConfig = yaml.safe_load(conf)
+
+#TODO: this will not stay static...
+config = dict(MainConfig['SoundConfig']['Sound-1'])
+config.update(vars(args))
+
 try:
-    Audio(args, q, event).play_file()
+    Audio(args=config, queue=q, event=event).play_file()
 except KeyboardInterrupt:
     parser.exit('\nInterrupted by user')
 except queue.Full:
