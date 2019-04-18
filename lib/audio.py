@@ -53,24 +53,26 @@ class Audio:
             outdata[:] = data
 
     def play_file(self):
-        with sf.SoundFile(self.args.filename) as f:
-            for _ in range(self.args.buffersize):
-                data = f.buffer_read(self.args.blocksize, dtype='float32')
+        with sf.SoundFile(self.args["filename"]) as f:
+            for _ in range(self.args["buffersize"]):
+                data = f.buffer_read(self.args["blocksize"], dtype='float32')
                 if not data:
                     break
                 self.queue.put_nowait(data)  # Pre-fill queue
 
             stream = sd.RawOutputStream(
                 samplerate=f.samplerate,
-                blocksize=self.args.blocksize,
-                device=self.args.device,
+                blocksize=self.args["blocksize"],
+                device=self.args["device"],
                 channels=f.channels,
                 dtype='float32',
                 callback=self._callback,
                 finished_callback=self.event.set)
             with stream:
-                timeout = self.args.blocksize * self.args.buffersize / f.samplerate
+                timeout = self.args["blocksize"] * self.args[
+                    "buffersize"] / f.samplerate
                 while data:
-                    data = f.buffer_read(self.args.blocksize, dtype='float32')
+                    data = f.buffer_read(
+                        self.args["blocksize"], dtype='float32')
                     self.queue.put(data, timeout=timeout)
                 self.event.wait()  # Wait until playback is finished
