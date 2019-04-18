@@ -29,11 +29,10 @@ from pprint import pprint
 
 
 class Audio:
-    def __init__(self, args, queue, event, fobj):
+    def __init__(self, args, queue, event):
         self.args = args
         self.queue = queue
         self.event = event
-        self.fobj = fobj
 
     def _callback(self, outdata, frames, time, status):
         assert frames == self.args['blocksize']
