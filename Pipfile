@@ -5,9 +5,13 @@ verify_ssl = true
 
 [dev-packages]
 yapf = "*"
+pysnooper = "*"
 
 [packages]
-python-sounddevice = "*"
+sounddevice = "*"
+pyyaml = "*"
+pydub = "*"
+simpleaudio = "*"
 
 [requires]
 python_version = "3.7"
