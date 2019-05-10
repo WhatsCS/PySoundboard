@@ -8,29 +8,33 @@ import simpleaudio as sa
 import sys
 import threading
 
-play_song = signal('play-song')
 
-
-@play_song.connect
-def subscriber(sender, **kwargs):
-    am = kwargs.get('am')
-    am.audio_stream(kwargs.get('audio'))
-    print("playing music")
-    am.start()
+#
+# play_song = signal('play-song')
+#
+#
+# @play_song.connect
+# def subscriber(sender, **kwargs):
+#     AudioMaster(audio=kwargs.get('audio'))
 
 
 class AudioMaster(threading.Thread):
-    def __init__(self):
+    def __init__(self, audio):
         threading.Thread.__init__(self)
+        self.daemon = True
+        self.name = 'Song-Thread'
         self.length = None
         self.lengthStr = None
         self.play_audio = None
+        self.audio = audio
+
+        self.start()
 
     def run(self):
-        self.play()
+        self.audio_stream()
 
-    def audio_stream(self, audio: str):
-        filepath = audio
+    def audio_stream(self):
+        filepath = self.audio
         ext = filepath.rsplit('.')[1]
 
         # Get proper path (just assume it's shit)
@@ -46,8 +50,6 @@ class AudioMaster(threading.Thread):
                                          num_channels=song.channels,
                                          bytes_per_sample=song.sample_width,
                                          sample_rate=song.frame_rate)
-
-    def play(self):
         x = 0
         while x is not 10:
             print(str(timedelta(seconds=self.length)).rsplit('.')[0])
