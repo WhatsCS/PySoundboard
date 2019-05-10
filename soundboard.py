@@ -27,8 +27,8 @@ def int_or_str(text):
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('-c',
                     '--config',
-                    help='load config from non-standard location',
-                    default='None')
+                    default=None,
+                    help='load config from non-standard location')
 parser.add_argument('-d',
                     '--device',
                     type=int_or_str,
@@ -44,6 +44,7 @@ parser.add_argument(
     type=int,
     default=20,
     help='number of blocks used for buffering (default: %(default)s)')
+parser.add_argument('-s', '--song', type=int, default=0, help='play song #')
 parser.add_argument('-ld',
                     '--list-devices',
                     action='store_true',
@@ -60,15 +61,16 @@ if args.buffersize < 1:
     parser.error('buffersize must be at least 1')
 if args.list_devices is True:
     get_devs()
-# if args.stop_playback is True:
-#     stop_audio()
-#     parser.exit(0, 'Audio Stopped!')
 
 # Load config into args (for now)
-with open('config.yaml') as conf:
-    MainConfig = yaml.safe_load(conf)
+if args.config is not None:
+    with open(args.config) as conf:
+        MainConfig = yaml.safe_load(conf)
+else:
+    with open('config.yaml') as conf:
+        MainConfig = yaml.safe_load(conf)
 
-#TODO: this will not stay static...
+# TODO: this will not stay static...
 config = dict(MainConfig['SoundConfig'])
 config.update(vars(args))
 
@@ -83,16 +85,21 @@ for key, value in config.items():
     i += 1
 play_song = blinker.signal('play-song')
 
-soin = 1
+if args.song > 0:
+    try:
+        play_song.send('anonymous', audio=playlist[args.song])
+        print("num of threads running: %s" % threading.active_count())
+        t = threading.enumerate()
+        print("threads:%r" % t)
+        time.sleep(3)
+        print("Double checkin shit bruv")
+        time.sleep(7)
+        print("closing shop")
+    except KeyboardInterrupt:
+        parser.exit('\nInterrupted by user')
+    except Exception as e:
+        parser.exit(type(e).__name__ + ': ' + str(e))
 
-try:
-    play_song.send('anonymous', audio=playlist[soin])
-    print("num of threads running: %s" % threading.active_count())
-    t = threading.enumerate()
-    print("threads:%r" % t)
-    time.sleep(10)
-    print("closing shop")
-except KeyboardInterrupt:
-    parser.exit('\nInterrupted by user')
-except Exception as e:
-    parser.exit(type(e).__name__ + ': ' + str(e))
+if args.new_song is not None:
+    with open('config.yaml') as conf:
+        newMas = {'Sound-'}
