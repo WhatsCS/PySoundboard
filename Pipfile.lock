@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fdda24e8fa0a28abae1af9fe7f3eab3f4ca3300fff1b2e00d788bc40cb6da804"
+            "sha256": "4742a87a9525d9bdcee1dea7efede78cf8ecedb050b37b410b088bf19682a772"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,13 @@
         ]
     },
     "default": {
+        "blinker": {
+            "hashes": [
+                "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"
+            ],
+            "index": "pypi",
+            "version": "==1.4"
+        },
         "cffi": {
             "hashes": [
                 "sha256:041c81822e9f84b1d9c401182e174996f0bae9991f33725d059b771744290774",
@@ -62,6 +69,14 @@
             ],
             "index": "pypi",
             "version": "==0.23.1"
+        },
+        "pysnooper": {
+            "hashes": [
+                "sha256:48e8144f237fce79e3f7d1c5bf32911e3db338767eab70a9c3a75c6e5c4b543c",
+                "sha256:ded331af307882464728e773507da0dccb2c8cba98e1ce00cadb082303328c94"
+            ],
+            "index": "pypi",
+            "version": "==0.0.34"
         },
         "pyyaml": {
             "hashes": [
@@ -111,11 +126,11 @@
     "develop": {
         "pysnooper": {
             "hashes": [
-                "sha256:340e1b5fd7f6c4268c5c9a2bc3cbff53ceab2c0625b21097f3f63082ec12310c",
-                "sha256:cc0fed0e162e34c6c83cb7b25fe2059427ca73d08150088e2374a6b1726ff2b2"
+                "sha256:48e8144f237fce79e3f7d1c5bf32911e3db338767eab70a9c3a75c6e5c4b543c",
+                "sha256:ded331af307882464728e773507da0dccb2c8cba98e1ce00cadb082303328c94"
             ],
             "index": "pypi",
-            "version": "==0.0.23"
+            "version": "==0.0.34"
         },
         "yapf": {
             "hashes": [
