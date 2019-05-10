@@ -5,6 +5,8 @@
 import argparse
 import os
 import queue
+from typing import Any, Tuple
+
 import sounddevice as sd
 import threading
 import yaml
@@ -14,6 +16,7 @@ from audio_lib.utils import get_devs
 import audio_lib.dispatch
 from pprint import pprint
 import time
+from collections import OrderedDict
 
 
 def int_or_str(text):
@@ -49,10 +52,11 @@ parser.add_argument('-ld',
                     '--list-devices',
                     action='store_true',
                     help='get list of available devices')
-# parser.add_argument('--stop-playback',
-#                     action='store_true',
-#                     default=False,
-#                     help='Stops all audio playback')
+parser.add_argument('-ns',
+                    '--new-song',
+                    type=str,
+                    default=None,
+                    help='adds a new song to the config')
 # TODO: Add in --gui argument
 args = parser.parse_args()
 if args.blocksize == 0:
@@ -65,19 +69,15 @@ if args.list_devices is True:
 # Load config into args (for now)
 if args.config is not None:
     with open(args.config) as conf:
-        MainConfig = yaml.safe_load(conf)
+        MainConfig = OrderedDict(yaml.safe_load(conf))
 else:
     with open('config.yaml') as conf:
-        MainConfig = yaml.safe_load(conf)
-
-# TODO: this will not stay static...
-config = dict(MainConfig['SoundConfig'])
-config.update(vars(args))
+        MainConfig = OrderedDict(yaml.safe_load(conf))
 
 playlist: dict = {}
 i = 1
-for key, value in config.items():
-    if key == 'Sound-' + str(i):
+for key, value in MainConfig.items():
+    if key == i:
         for k, v in value.items():
             if k == 'filename':
                 songs = {i: v}
@@ -101,5 +101,8 @@ if args.song > 0:
         parser.exit(type(e).__name__ + ': ' + str(e))
 
 if args.new_song is not None:
-    with open('config.yaml') as conf:
-        newMas = {'Sound-'}
+    with open('config.yaml', 'a') as conf:
+        # get last sound so we can increment
+        l_sound = MainConfig.popitem()
+        n_sound = {l_sound[0] + 1: {'filename': args.new_song}}
+        yaml.dump(n_sound, conf)
