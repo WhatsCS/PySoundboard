@@ -9,9 +9,11 @@ import sounddevice as sd
 import threading
 import yaml
 import blinker
-from lib.audio import AudioMaster, stop_audio
-from lib.utils import get_devs
+from audio_lib.audio import AudioMaster, stop_audio
+from audio_lib.utils import get_devs
+import audio_lib.dispatch
 from pprint import pprint
+import time
 
 
 def int_or_str(text):
@@ -80,13 +82,16 @@ for key, value in config.items():
                 playlist.update(songs)
     i += 1
 play_song = blinker.signal('play-song')
-am = AudioMaster()
 
 soin = 1
 
 try:
-    if soin == 1:
-        play_song.send('anonymous', am=am, audio=playlist[soin])
+    play_song.send('anonymous', audio=playlist[soin])
+    print("num of threads running: %s" % threading.active_count())
+    t = threading.enumerate()
+    print("threads:%r" % t)
+    time.sleep(10)
+    print("closing shop")
 except KeyboardInterrupt:
     parser.exit('\nInterrupted by user')
 except Exception as e:
