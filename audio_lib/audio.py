@@ -1,13 +1,10 @@
-from pydub import AudioSegment
-from datetime import timedelta
-from time import sleep
-from pathlib import Path
-from blinker import signal
-import pysnooper
-import simpleaudio as sa
-import sys
 import threading
+from datetime import timedelta
+from pathlib import Path
+from time import sleep
 
+import simpleaudio as sa
+from pydub import AudioSegment
 
 #
 # play_song = signal('play-song')
@@ -19,6 +16,7 @@ import threading
 
 
 class AudioMaster(threading.Thread):
+
     def __init__(self, audio):
         threading.Thread.__init__(self)
         self.daemon = True

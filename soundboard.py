@@ -3,20 +3,14 @@
     users to bind a key/GUI Button to any type of sound/video file.
 '''
 import argparse
-import os
-import queue
-from typing import Any, Tuple
-
-import sounddevice as sd
 import threading
-import yaml
-import blinker
-from audio_lib.audio import AudioMaster, stop_audio
-from audio_lib.utils import get_devs
-import audio_lib.dispatch
-from pprint import pprint
 import time
 from collections import OrderedDict
+
+import blinker
+import yaml
+
+from audio_lib.utils import get_devs
 
 
 def int_or_str(text):
@@ -85,6 +79,7 @@ for key, value in MainConfig.items():
     i += 1
 play_song = blinker.signal('play-song')
 
+# TODO: put in support for checking on currently running sound and create a queue or kill :shrug:
 if args.song > 0:
     try:
         play_song.send('anonymous', audio=playlist[args.song])

@@ -1,4 +1,5 @@
 import blinker
+
 from .audio import AudioMaster
 
 play_song = blinker.signal('play-song')
