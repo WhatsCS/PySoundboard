@@ -8,7 +8,8 @@ import queue
 import sounddevice as sd
 import threading
 import yaml
-from lib.audio import play_file, stop_audio
+import blinker
+from lib.audio import AudioMaster, stop_audio
 from lib.utils import get_devs
 from pprint import pprint
 
@@ -66,13 +67,26 @@ with open('config.yaml') as conf:
     MainConfig = yaml.safe_load(conf)
 
 #TODO: this will not stay static...
-config = dict(MainConfig['SoundConfig']['Sound-1'])
+config = dict(MainConfig['SoundConfig'])
 config.update(vars(args))
 
-#TODO: Figure out how to get information of the currently running stream
-#      I'll probably have to figure out threading more properly cause my head hurts
+playlist: dict = {}
+i = 1
+for key, value in config.items():
+    if key == 'Sound-' + str(i):
+        for k, v in value.items():
+            if k == 'filename':
+                songs = {i: v}
+                playlist.update(songs)
+    i += 1
+play_song = blinker.signal('play-song')
+am = AudioMaster()
+
+soin = 1
+
 try:
-    play_file(args=config)
+    if soin == 1:
+        play_song.send('anonymous', am=am, audio=playlist[soin])
 except KeyboardInterrupt:
     parser.exit('\nInterrupted by user')
 except Exception as e:
