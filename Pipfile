@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 yapf = "*"
 pysnooper = "*"
+coverage = "*"
 
 [packages]
 sounddevice = "*"
@@ -13,7 +14,7 @@ pyyaml = "*"
 pydub = "*"
 simpleaudio = "*"
 blinker = "*"
-pysnooper = "==0.0.34"
+pynput = "*"
 
 [requires]
 python_version = "3.7"
