@@ -46,9 +46,9 @@ def on_press(key):
 
 
 def on_release(key):
+    global current
     try:
         current.remove(key)
-        print(f'{key} released')
     except:
         pass
 

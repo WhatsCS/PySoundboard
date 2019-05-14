@@ -48,6 +48,8 @@ class AudioMaster(threading.Thread):
                                          num_channels=song.channels,
                                          bytes_per_sample=song.sample_width,
                                          sample_rate=song.frame_rate)
+
+        # TODO: Remove/Alter as this is for testing
         x = 0
         while x is not 10:
             print(str(timedelta(seconds=self.length)).rsplit('.')[0])
