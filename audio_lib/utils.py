@@ -9,7 +9,9 @@ key_map = {
     'lctrl': Key.ctrl_l,
     'rctrl': Key.ctrl_r,
     'shift': Key.shift,
-    'alt': Key.alt
+    'alt': Key.alt,
+    'space': Key.space,
+    'esc': Key.esc
 }
 
 
@@ -33,5 +35,13 @@ def translate_keys(tl_arg):
                     keys[keys.index(item)] = key_map[item]
             tl_arg[i][1] = set(keys)
     # if type(tl_arg) is list:
+    elif type(tl_arg) is str:
+        keys = tl_arg.split('+')
+        for item in keys:
+            if item in list(string.ascii_letters) or item in list(string.digits):
+                keys[keys.index(item)] = KeyCode(char=item)
+            else:
+                keys[keys.index(item)] = key_map[item]
+        tl_arg = set(keys)
 
     return tl_arg

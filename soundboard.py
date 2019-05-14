@@ -15,6 +15,7 @@ from audio_lib.utils import get_devs, translate_keys
 # ------ General Use Globals ------ #
 # Create a playlist dictionary for easy processing
 playlist: dict = {}
+gen_keybinds = {}
 
 
 # ------ General Use Functions ------ #
@@ -40,6 +41,13 @@ def on_press(key):
             current.add(key)
             if all(k in current for k in v[1]):
                 play_sound.send('anonymous', audio=playlist[k][0])
+
+    for k, v in gen_keybinds.items():
+        if key in v:
+            current.add(key)
+            if all(k in current for k in v):
+                # quit lel
+                print("OH GOD DEBUG: %s" % k)
 
     if key == keyboard.Key.esc:
         do_quit = True
@@ -111,6 +119,12 @@ for key, value in MainConfig['Sound'].items():
     stuffs = {key: value}
     playlist.update(stuffs)
 playlist = translate_keys(playlist)
+
+# Fill general use keybinds
+for key, value in MainConfig['General']['keybinds'].items():
+    value = translate_keys(value)
+    stuffs = {key: value}
+    gen_keybinds.update(stuffs)
 
 # TODO: put in support for checking on currently running sound and create a queue or kill :shrug:
 if args.sound > 0:
