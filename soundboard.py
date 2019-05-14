@@ -9,7 +9,7 @@ import time
 import yaml
 from pynput import keyboard
 
-from audio_lib.dispatch import play_song
+from audio_lib.dispatch import play_sound
 from audio_lib.utils import get_devs, translate_keys
 
 # ------ General Use Globals ------ #
@@ -39,7 +39,7 @@ def on_press(key):
         if key in v[1]:
             current.add(key)
             if all(k in current for k in v[1]):
-                play_song.send('anonymous', audio=playlist[k][0])
+                play_sound.send('anonymous', audio=playlist[k][0])
 
     if key == keyboard.Key.esc:
         do_quit = True
@@ -79,16 +79,16 @@ parser.add_argument(
     type=int,
     default=20,
     help='number of blocks used for buffering (default: %(default)s)')
-parser.add_argument('-s', '--song', type=int, default=0, help='play song #')
+parser.add_argument('-s', '--sound', type=int, default=0, help='play sound #')
 parser.add_argument('-ld',
                     '--list-devices',
                     action='store_true',
                     help='get list of available devices')
 parser.add_argument('-ns',
-                    '--new-song',
+                    '--new-sound',
                     type=str,
                     default=None,
-                    help='adds a new song to the config')
+                    help='adds a new sound to the config')
 # TODO: Add in --gui argument
 args = parser.parse_args()
 if args.blocksize == 0:
@@ -113,9 +113,9 @@ for key, value in MainConfig['Sound'].items():
 playlist = translate_keys(playlist)
 
 # TODO: put in support for checking on currently running sound and create a queue or kill :shrug:
-if args.song > 0:
+if args.sound > 0:
     try:
-        play_song.send('anonymous', audio=playlist[args.song][0])
+        play_sound.send('anonymous', audio=playlist[args.sound][0])
         print("num of threads running: %s" % threading.active_count())
         t = threading.enumerate()
         print("threads:%r" % t)
@@ -128,12 +128,12 @@ if args.song > 0:
     except Exception as e:
         parser.exit(1, type(e).__name__ + ': ' + str(e))
 
-if args.new_song is not None:
+if args.new_sound is not None:
     # TODO: FIX THIS DOOD! IT BROKE AS HELL!
     with open('config.yaml', 'rw') as conf:
         # get last sound so we can increment
         l_sound = MainConfig['Sound'].popitem()
-        n_sound = {l_sound[0] + 1: {'': args.new_song}}
+        n_sound = {l_sound[0] + 1: {'': args.new_sound}}
         yaml.dump(n_sound, conf)
 
 if args.run:
