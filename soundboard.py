@@ -36,18 +36,17 @@ current = set()
 def on_press(key):
     global do_quit
 
-    for k, v in playlist.items():
-        if key in v[1]:
+    for k, val in playlist.items():
+        if key in val[1]:
             current.add(key)
-            if all(k in current for k in v[1]):
+            if all(k in current for k in val[1]):
                 play_sound.send('anonymous', audio=playlist[k][0])
 
-    for k, v in gen_keybinds.items():
-        if key in v:
+    for k, val in gen_keybinds.items():
+        if key in val:
             current.add(key)
-            if all(k in current for k in v):
-                # quit lel
-                print("OH GOD DEBUG: %s" % k)
+            if all(k in current for k in val):
+                do_quit = True
 
     if key == keyboard.Key.esc:
         do_quit = True
