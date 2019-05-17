@@ -29,7 +29,8 @@ def translate_keys(tl_arg):
         for i in range(1, len(tl_arg) + 1):
             keys = tl_arg[i][1].split('+')
             for item in keys:
-                if item in list(string.ascii_letters) or item in list(string.digits):
+                if item in list(string.ascii_letters) or item in list(
+                        string.digits):
                     keys[keys.index(item)] = KeyCode(char=item)
                 else:
                     keys[keys.index(item)] = key_map[item]
@@ -38,7 +39,8 @@ def translate_keys(tl_arg):
     elif type(tl_arg) is str:
         keys = tl_arg.split('+')
         for item in keys:
-            if item in list(string.ascii_letters) or item in list(string.digits):
+            if item in list(string.ascii_letters) or item in list(
+                    string.digits):
                 keys[keys.index(item)] = KeyCode(char=item)
             else:
                 keys[keys.index(item)] = key_map[item]

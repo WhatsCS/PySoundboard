@@ -3,7 +3,6 @@
     users to bind a key/GUI Button to any type of sound/video file.
 '''
 import argparse
-import threading
 import time
 
 import yaml
@@ -76,21 +75,10 @@ parser.add_argument('-c',
                     '--config',
                     default=None,
                     help='load config from non-standard location')
-parser.add_argument('-d',
-                    '--device',
-                    type=int_or_str,
-                    help='output device (numeric ID or substring)')
-parser.add_argument('-b',
-                    '--blocksize',
-                    type=int,
-                    default=2048,
-                    help='block size (default: %(default)s)')
-parser.add_argument(
-    '-q',
-    '--buffersize',
-    type=int,
-    default=20,
-    help='number of blocks used for buffering (default: %(default)s)')
+# parser.add_argument('-d',
+#                     '--device',
+#                     type=int_or_str,
+#                     help='output device (numeric ID or substring)')
 parser.add_argument('-s', '--sound', type=int, default=0, help='play sound #')
 parser.add_argument('-ld',
                     '--list-devices',
@@ -104,10 +92,7 @@ parser.add_argument('-ns',
                     help='adds a new sound to the config')
 # TODO: Add in --gui argument
 args = parser.parse_args()
-if args.blocksize == 0:
-    parser.error('blocksize must not be zero')
-if args.buffersize < 1:
-    parser.error('buffersize must be at least 1')
+
 if args.list_devices is True:
     get_devs()
 

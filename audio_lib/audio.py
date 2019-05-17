@@ -6,7 +6,6 @@ from time import sleep
 import simpleaudio as sa
 from pydub import AudioSegment
 
-#
 # play_sound = signal('play-sound')
 #
 #
