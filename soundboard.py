@@ -9,6 +9,7 @@ import time
 import yaml
 from pynput import keyboard
 
+from audio_lib.audio import stop_audio
 from audio_lib.dispatch import play_sound
 from audio_lib.utils import get_devs, translate_keys
 
@@ -37,26 +38,29 @@ def on_press(key):
     global do_quit
 
     for k, val in playlist.items():
-        if key in val[1]:
+        if key in val:
             current.add(key)
-            if all(k in current for k in val[1]):
+            if all(k in current for k in val):
                 play_sound.send('anonymous', audio=playlist[k][0])
-
     for k, val in gen_keybinds.items():
         if key in val:
             current.add(key)
             if all(k in current for k in val):
-                do_quit = True
+                if k == 'quit':
+                    do_quit = True
+                if k == 'stop':
+                    stop_audio()
 
-    if key == keyboard.Key.esc:
-        do_quit = True
+    # if key == keyboard.Key.esc:
+    #     do_quit = True
 
 
 def on_release(key):
     global current
     try:
         current.remove(key)
-    except:
+    except Exception as e:
+        print(type(e).__name__ + ': ' + str(e))
         pass
 
 
@@ -116,7 +120,7 @@ else:
 
 # Fill the playlist
 for key, value in MainConfig['Sound'].items():
-    v = translate_keys(value[1])
+    v = [value[0], translate_keys(value[1])]
     stuffs = {key: v}
     playlist.update(stuffs)
 

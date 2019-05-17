@@ -49,16 +49,11 @@ class AudioMaster(threading.Thread):
                                          bytes_per_sample=sound.sample_width,
                                          sample_rate=sound.frame_rate)
 
-        # TODO: Remove/Alter as this is for testing
-        x = 0
-        while x is not 10:
-            print(str(timedelta(seconds=self.length)).rsplit('.')[0])
+        # # TODO: Remove/Alter as this is for testing
+        while True:
             if not self.play_audio.is_playing():
                 break
             sleep(1)
-            self.length -= 1
-            x += 1
-        stop_audio()
 
 
 def stop_audio():
