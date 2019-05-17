@@ -38,9 +38,9 @@ def on_press(key):
     global do_quit
 
     for k, val in playlist.items():
-        if key in val:
+        if key in val[1]:
             current.add(key)
-            if all(k in current for k in val):
+            if all(k in current for k in val[1]):
                 play_sound.send('anonymous', audio=playlist[k][0])
     for k, val in gen_keybinds.items():
         if key in val:
@@ -49,6 +49,7 @@ def on_press(key):
                 if k == 'quit':
                     do_quit = True
                 if k == 'stop':
+                    print("Stopping currently playing audio!!")
                     stop_audio()
 
     # if key == keyboard.Key.esc:
@@ -58,10 +59,10 @@ def on_press(key):
 def on_release(key):
     global current
     try:
-        current.remove(key)
+        if len(current) > 0:
+            current.discard(key)
     except Exception as e:
-        print(type(e).__name__ + ': ' + str(e))
-        pass
+        parser.exit(1, type(e).__name__ + ': ' + str(e))
 
 
 # ------ Arg Parsing and Processing ------ #
@@ -134,13 +135,6 @@ for key, value in MainConfig['General']['keybinds'].items():
 if args.sound > 0:
     try:
         play_sound.send('anonymous', audio=playlist[args.sound][0])
-        print("num of threads running: %s" % threading.active_count())
-        t = threading.enumerate()
-        print("threads:%r" % t)
-        time.sleep(3)
-        print("Double checkin shit bruv")
-        time.sleep(7)
-        print("closing shop")
     except KeyboardInterrupt:
         parser.exit(0, '\nInterrupted by user')
     except Exception as e:

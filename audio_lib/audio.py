@@ -52,6 +52,7 @@ class AudioMaster(threading.Thread):
         # # TODO: Remove/Alter as this is for testing
         while True:
             if not self.play_audio.is_playing():
+                print("Sound finished!")
                 break
             sleep(1)
 
