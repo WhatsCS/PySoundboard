@@ -1,9 +1,8 @@
-Sound:
-  1:
-    - "test_audio.ogg"
-    - "ctrl+shift+p"
-
 General:
   keybinds:
-    stop: "ctrl+space"
-    quit: "esc"
+    quit: esc
+    stop: ctrl+space
+Sound:
+  1:
+  - test_audio.ogg
+  - ctrl+shift+p
