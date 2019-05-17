@@ -96,6 +96,7 @@ parser.add_argument('-ns',
                     '--new-sound',
                     type=str,
                     default=None,
+                    nargs='+',
                     help='adds a new sound to the config')
 # TODO: Add in --gui argument
 args = parser.parse_args()
@@ -116,14 +117,14 @@ else:
 
 # Fill the playlist
 for key, value in MainConfig['Sound'].items():
-    stuffs = {key: value}
+    v = translate_keys(value[1])
+    stuffs = {key: v}
     playlist.update(stuffs)
-playlist = translate_keys(playlist)
 
 # Fill general use keybinds
 for key, value in MainConfig['General']['keybinds'].items():
-    value = translate_keys(value)
-    stuffs = {key: value}
+    v = translate_keys(value)
+    stuffs = {key: v}
     gen_keybinds.update(stuffs)
 
 # TODO: put in support for checking on currently running sound and create a queue or kill :shrug:
@@ -143,12 +144,19 @@ if args.sound > 0:
         parser.exit(1, type(e).__name__ + ': ' + str(e))
 
 if args.new_sound is not None:
-    # TODO: FIX THIS DOOD! IT BROKE AS HELL!
-    with open('config.yaml', 'rw') as conf:
-        # get last sound so we can increment
-        l_sound = MainConfig['Sound'].popitem()
-        n_sound = {l_sound[0] + 1: {'': args.new_sound}}
-        yaml.dump(n_sound, conf)
+    if len(args.new_sound) is 1:
+        with open('config.yaml', 'a') as conf:
+            n_sound = {len(MainConfig['Sound']) + 1: [args.new_sound[0], '']}
+            yaml.dump(n_sound, conf)
+    else:
+        with open('config.yaml', 'w') as conf:
+            config = MainConfig
+            n_sound = {
+                len(MainConfig['Sound']) + 1:
+                [args.new_sound[0], args.new_sound[1].strip('\'')]
+            }
+            config['Sound'].update(n_sound)
+            yaml.dump(config, conf)
 
 if args.run:
     try:
