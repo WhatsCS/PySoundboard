@@ -2,6 +2,7 @@ from pprint import pprint
 import pysnooper
 import string
 import sounddevice as sd
+import sys
 from pynput.keyboard import Key, KeyCode
 
 key_map = {
@@ -25,6 +26,7 @@ def get_curr():
 
 # @pysnooper.snoop()
 def translate_keys(tl_arg):
+
     if type(tl_arg) is dict:
         for i in range(1, len(tl_arg) + 1):
             keys = tl_arg[i][1].split('+')
@@ -36,8 +38,13 @@ def translate_keys(tl_arg):
                     keys[keys.index(item)] = key_map[item]
             tl_arg[i][1] = set(keys)
     # if type(tl_arg) is list:
-    elif type(tl_arg) is str:
+
+    if type(tl_arg) is str:
         keys = tl_arg.split('+')
+        if sys.platform == 'linux' and any(key == 'shift' for key in keys):
+            for k, i in enumerate(keys):
+                if i in list(string.ascii_letters):
+                    keys[k] = i.upper()
         for item in keys:
             if item in list(string.ascii_letters) or item in list(
                     string.digits):

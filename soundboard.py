@@ -57,6 +57,7 @@ def on_press(key):
 
 def on_release(key):
     global current
+
     try:
         if len(current) > 0:
             current.discard(key)
