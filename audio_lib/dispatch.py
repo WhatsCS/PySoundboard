@@ -2,9 +2,10 @@ import blinker
 
 from .audio import AudioMaster
 
-play_song = blinker.signal('play-song')
+play_sound = blinker.signal('play-sound')
 
 
-@play_song.connect
+# TODO: Build in a check for currently running audio so we don't overlap
+@play_sound.connect
 def subscriber(sender, **kwargs):
     AudioMaster(audio=kwargs.get('audio'))

@@ -6,11 +6,10 @@ from time import sleep
 import simpleaudio as sa
 from pydub import AudioSegment
 
+# play_sound = signal('play-sound')
 #
-# play_song = signal('play-song')
 #
-#
-# @play_song.connect
+# @play_sound.connect
 # def subscriber(sender, **kwargs):
 #     AudioMaster(audio=kwargs.get('audio'))
 
@@ -20,7 +19,7 @@ class AudioMaster(threading.Thread):
     def __init__(self, audio):
         threading.Thread.__init__(self)
         self.daemon = True
-        self.name = 'Song-Thread'
+        self.name = 'sound-Thread'
         self.length = None
         self.lengthStr = None
         self.play_audio = None
@@ -39,24 +38,22 @@ class AudioMaster(threading.Thread):
         filepath = str(Path(filepath).resolve())
 
         # Get
-        song = AudioSegment.from_file(filepath, format=ext)
-        self.length = int(song.duration_seconds)
+        sound = AudioSegment.from_file(filepath, format=ext)
+        self.length = int(sound.duration_seconds)
         self.lengthStr = str(
-            timedelta(seconds=song.duration_seconds)).rsplit('.')[0]
+            timedelta(seconds=sound.duration_seconds)).rsplit('.')[0]
 
-        self.play_audio = sa.play_buffer(song.raw_data,
-                                         num_channels=song.channels,
-                                         bytes_per_sample=song.sample_width,
-                                         sample_rate=song.frame_rate)
-        x = 0
-        while x is not 10:
-            print(str(timedelta(seconds=self.length)).rsplit('.')[0])
+        self.play_audio = sa.play_buffer(sound.raw_data,
+                                         num_channels=sound.channels,
+                                         bytes_per_sample=sound.sample_width,
+                                         sample_rate=sound.frame_rate)
+
+        # # TODO: Remove/Alter as this is for testing
+        while True:
             if not self.play_audio.is_playing():
+                print("Sound finished!")
                 break
             sleep(1)
-            self.length -= 1
-            x += 1
-        stop_audio()
 
 
 def stop_audio():

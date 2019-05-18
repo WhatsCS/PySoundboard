@@ -1,2 +1,8 @@
-1:
-  filename: test_audio.ogg
+General:
+  keybinds:
+    quit: esc
+    stop: ctrl+space
+Sound:
+  1:
+  - test_audio.ogg
+  - ctrl+shift+p
